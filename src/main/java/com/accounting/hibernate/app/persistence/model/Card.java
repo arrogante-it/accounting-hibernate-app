@@ -1,10 +1,12 @@
-package com.accounting.hibernate.app.model;
+package com.accounting.hibernate.app.persistence.model;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.experimental.Accessors;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,23 +16,18 @@ import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table
-@Accessors(chain = true)
+@AllArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode
-public class Customer {
+@EqualsAndHashCode(of = "id")
+@Entity
+@Table(name = "card")
+public class Card {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long tax_id;
-
-    private String name;
-
-    private String address;
-
-    @OneToMany(mappedBy = "contract")
-    List<Contract> contractList = new ArrayList<>();
+    @Setter(AccessLevel.PRIVATE)
+    @OneToMany(mappedBy = "card", cascade = {CascadeType.REFRESH, CascadeType.REMOVE})
+    List<Payment> payments = new ArrayList<>();
 }

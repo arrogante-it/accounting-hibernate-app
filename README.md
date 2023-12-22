@@ -14,26 +14,26 @@
 
 ## Program main functional:
 
-### ContractDAO methods:
-- getById
-- getAll
-- save
-- update
-- delete
+### ContractDao methods:
+- Save 
+- Update
+- Delete
+- Get by id
+- Get all
 
 ### CustomerDAO methods:
-- getById
-- getAll
-- save
-- update
-- delete
+- Save 
+- Update
+- Delete
+- Get by id
+- Get all
 
 ### PaymentDAO methods:
-- getById
-- getAll
-- save
-- update
-- delete
-- findAllByContract
-- findAllByCustomer
-- findAllAmountMoreThan
+- Save 
+- Update
+- Delete
+- Get by id
+- Get all
+- Find all by contract
+- Find all by customer
+- Find all amount more than

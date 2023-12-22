@@ -1,7 +1,7 @@
-package com.accounting.hibernate.app.repository.impl;
+package com.accounting.hibernate.app.persistence.repository.impl;
 
-import com.accounting.hibernate.app.model.Payment;
-import com.accounting.hibernate.app.repository.PaymentDAO;
+import com.accounting.hibernate.app.persistence.model.Payment;
+import com.accounting.hibernate.app.persistence.repository.PaymentDao;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @RequiredArgsConstructor
-public class PaymentDAOImpl implements PaymentDAO {
+public class PaymentDAOImpl implements PaymentDao {
 
     private final SessionFactory sessionFactory;
 

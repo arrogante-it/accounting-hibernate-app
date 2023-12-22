@@ -1,7 +1,7 @@
-package com.accounting.hibernate.app.repository.impl;
+package com.accounting.hibernate.app.persistence.repository.impl;
 
-import com.accounting.hibernate.app.model.Customer;
-import com.accounting.hibernate.app.repository.CustomerDAO;
+import com.accounting.hibernate.app.persistence.model.Customer;
+import com.accounting.hibernate.app.persistence.repository.CustomerDao;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -10,7 +10,7 @@ import org.hibernate.Transaction;
 import java.util.List;
 
 @RequiredArgsConstructor
-public class CustomerDAOImpl implements CustomerDAO {
+public class CustomerDAOImpl implements CustomerDao {
 
     private final SessionFactory sessionFactory;
 

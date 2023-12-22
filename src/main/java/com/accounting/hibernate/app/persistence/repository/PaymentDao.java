@@ -1,20 +1,20 @@
-package com.accounting.hibernate.app.repository;
+package com.accounting.hibernate.app.persistence.repository;
 
-import com.accounting.hibernate.app.model.Payment;
+import com.accounting.hibernate.app.persistence.model.Payment;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-public interface PaymentDAO {
-    Payment getById(Long id);
-
-    List<Payment> getAll();
-
+public interface PaymentDao {
     void save(Payment payment);
+
+    void update(Payment payment);
 
     void delete(Payment payment);
 
-    void update(Payment payment);
+    Payment getById(Long id);
+
+    List<Payment> getAll();
 
     List<Payment> findAllByContract(Long contractId);
 

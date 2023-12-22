@@ -1,31 +1,40 @@
-create TABLE payment (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    amount INT,
-    time TIMESTAMP,
-    contract_id BIGINT,
-    card_id BIGINT,
-    FOREIGN KEY (contract_id) REFERENCES contract (id),
-    FOREIGN KEY (card_id) REFERENCES card (id)
+create table payment (
+    id bigint auto_increment,
+    amount int,
+    time timestamp,
+    contract_id bigint,
+--    card_id bigint,
+    constraint payment_pk primary key (id),
+    constraint payment_contract_fk foreign key (contract_id) references contract (id),
+--    constraint payment_card_fk foreign key (card_id) references card (id)
 );
 
-create TABLE customer (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    tax_id BIGINT,
-    name VARCHAR(255),
-    address VARCHAR(255)
+create table customer (
+    id bigint auto_increment,
+    tax_id bigint,
+    name varchar(40),
+    address varchar(60),
+    contract_id bigint,
+    constraint customer_pk primary key (id),
+    constraint customer_contract_fk foreign key (contract_id) references contract (id)
 );
 
-create TABLE contract (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(255),
-    subject VARCHAR(255),
-    sum INT,
-    comments VARCHAR(1000),
-    date VARCHAR(10),
-    customer_id BIGINT,
-    FOREIGN KEY (customer_id) REFERENCES customer (id)
+--date field not sure that correct
+create table contract (
+    id bigint auto_increment,
+    name varchar(40),
+    subject varchar(40),
+    sum int,
+    comments varchar(255),
+    date date,
+    payment_id bigint,
+    constraint contract_pk primary key (id),
+    constraint contract_payment_fk foreign key (payment_id) references payment (id)
 );
 
-create TABLE card (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT
+create table card (
+    id bigint auto_increment,
+    payment_id bigint,
+    constraint card_pk primary key (id),
+    constraint card_fk foreign key (payment_id) references payment (id)
 );
