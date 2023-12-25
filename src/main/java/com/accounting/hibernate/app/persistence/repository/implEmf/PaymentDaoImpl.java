@@ -2,10 +2,10 @@ package com.accounting.hibernate.app.persistence.repository.implEmf;
 
 import com.accounting.hibernate.app.persistence.model.Payment;
 import com.accounting.hibernate.app.persistence.repository.PaymentDao;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.function.Consumer;

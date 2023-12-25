@@ -2,16 +2,16 @@ package com.accounting.hibernate.app.persistence.repository.implEmf;
 
 import com.accounting.hibernate.app.persistence.model.Contract;
 import com.accounting.hibernate.app.persistence.repository.ContractDao;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class ContractDaoImpl implements ContractDao {
-    private EntityManagerFactory entityManagerFactory;
+    private final EntityManagerFactory entityManagerFactory;
 
     public ContractDaoImpl(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
@@ -62,10 +62,10 @@ public class ContractDaoImpl implements ContractDao {
 
         try {
             result = entityManagerFunction.apply(entityManager);
-            entityManager.getTransaction().commit();
+            entityTransaction.commit();
         } catch (Exception e) {
-            entityManager.getTransaction().rollback();
-            throw new RuntimeException("rolled back. ", e);
+            entityTransaction.rollback();
+            throw new RuntimeException("rolled back." + e);
         } finally {
             entityManager.close();
         }

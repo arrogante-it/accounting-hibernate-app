@@ -2,11 +2,10 @@ package com.accounting.hibernate.app.persistence.repository.implEmf;
 
 import com.accounting.hibernate.app.persistence.model.Customer;
 import com.accounting.hibernate.app.persistence.repository.CustomerDao;
-import org.hibernate.Session;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -16,35 +15,6 @@ public class CustomerDaoImpl implements CustomerDao {
 
     public CustomerDaoImpl(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
-    }
-
-    // todo этого метода нет в ТЗ
-    public Customer findByIdFetchContracts(Long id) {
-        return readWithinTx(entityManager ->
-                entityManager
-                        .createQuery("select c from Customer c join fetch c.contracts where c.id = :id",
-                                Customer.class)
-                        .setParameter("id", id)
-                        .getSingleResult()
-        );
-    }
-
-    // todo этого метода нет в ТЗ
-    private <T> T readWithinTx(Function<EntityManager, T> entityManagerFunction) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        entityManager.unwrap(Session.class).setDefaultReadOnly(true);
-        entityManager.getTransaction().begin();
-
-        try {
-            T queryResult = entityManagerFunction.apply(entityManager);
-            entityManager.getTransaction().commit();
-            return queryResult;
-        } catch (Exception e) {
-            entityManager.getTransaction().rollback();
-            throw new RuntimeException(e);
-        } finally {
-            entityManager.close();
-        }
     }
 
     @Override
@@ -67,13 +37,19 @@ public class CustomerDaoImpl implements CustomerDao {
 
     @Override
     public Customer getById(Long id) {
-        return performReturningWithinPersistenceContext(entityManager -> entityManager.find(Customer.class, id));
+        return performReturningWithinPersistenceContext(entityManager ->
+                entityManager.createQuery(
+                        "select distinct c from Customer c left join fetch c.contracts where c.id = :customerId",
+                        Customer.class)
+                        .setParameter("customerId", id).getSingleResult());
     }
 
     @Override
     public List<Customer> getAll() {
         return performReturningWithinPersistenceContext(entityManager ->
-                entityManager.createQuery("select c from Customer c", Customer.class).getResultList());
+                entityManager.createQuery("select distinct c from Customer c left join fetch c.contracts",
+                        Customer.class)
+                        .getResultList());
     }
 
     private void performWithinPersistenceContext(Consumer<EntityManager> entityManagerConsumer) {
