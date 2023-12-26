@@ -21,7 +21,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@Setter // для toMany делаем private
+@Setter
 @EqualsAndHashCode(of = "id")
 @ToString
 @Entity
@@ -43,13 +43,10 @@ public class Contract {
     @Column(name = "comments")
     private String comments;
 
-    @Column(name = "date", nullable = false)
+    @Column(name = "date_contract", nullable = false)
     private LocalDate date;
 
-    @ManyToOne(fetch = FetchType.LAZY) // по умолчанию стоит eager для всех ToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
     private Customer customer;
-
-//    @OneToMany(mappedBy = "contract")
-//    List<Payment> payments = new ArrayList<>();
 }

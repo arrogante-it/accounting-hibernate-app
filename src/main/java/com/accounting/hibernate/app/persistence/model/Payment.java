@@ -37,11 +37,7 @@ public class Payment {
     @Column(name = "time", nullable = false)
     private LocalDate time;
 
-//    @JoinColumn(name = "contract_id")
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    private Contract contract;
-
-    @ManyToOne(fetch = FetchType.LAZY) // eager по умолчанию стоит для ToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "card_id")
     private Card card;
 }
