@@ -1,4 +1,4 @@
-package com.accounting.hibernate.app.persistence.repository.implEmf;
+package com.accounting.hibernate.app.persistence.repository.impl;
 
 import com.accounting.hibernate.app.persistence.model.Payment;
 import com.accounting.hibernate.app.persistence.repository.PaymentDao;
