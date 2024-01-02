@@ -32,7 +32,6 @@ public class Card {
     private Long id;
 
     @Setter(AccessLevel.PRIVATE)
-    @OneToMany(mappedBy = "card", cascade = {CascadeType.PERSIST,
-            CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH})
+    @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Payment> payments = new ArrayList<>();
 }

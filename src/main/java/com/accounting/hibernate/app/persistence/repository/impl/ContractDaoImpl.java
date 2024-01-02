@@ -35,11 +35,13 @@ public class ContractDaoImpl implements ContractDao {
         });
     }
 
+    // todo rewrite, cos need override lazy
     @Override
     public Contract getById(Long id) {
         return performReturningWithinPersistenceContext(entityManager -> entityManager.find(Contract.class, id));
     }
 
+    // todo rewrite, cos need override lazy
     @Override
     public List<Contract> getAll() {
         return performReturningWithinPersistenceContext(entityManager ->

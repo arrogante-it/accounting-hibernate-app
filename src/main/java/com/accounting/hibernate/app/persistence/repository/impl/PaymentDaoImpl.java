@@ -5,6 +5,8 @@ import com.accounting.hibernate.app.persistence.repository.PaymentDao;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Query;
+import org.hibernate.Hibernate;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -36,12 +38,14 @@ public class PaymentDaoImpl implements PaymentDao {
         });
     }
 
+    // todo rewrite
     @Override
     public Payment getById(Long id) {
         return performReturningWithinPersistenceContext(entityManager ->
                 entityManager.find(Payment.class, id));
     }
 
+    // todo rewrite, cos need override lazy
     @Override
     public List<Payment> getAll() {
         return performReturningWithinPersistenceContext(entityManager ->
@@ -50,18 +54,39 @@ public class PaymentDaoImpl implements PaymentDao {
 
     @Override
     public List<Payment> findAllByContract(Long contractId) {
-        return null;
+        return performReturningWithinPersistenceContext(entityManager ->
+                entityManager.createQuery("select p from Payment p join fetch p.contract " +
+                        "where p.contract.id = :contractId", Payment.class)
+                        .setParameter("contractId", contractId)
+                        .getResultList()
+        );
     }
 
+    // todo refactor
+    // todo rewrite, cos need override lazy
     @Override
     public List<Payment> findAllByCustomer(Long customerId) {
-        return null;
+        return performReturningWithinPersistenceContext(entityManager ->
+                entityManager.createQuery("select p from Payment p " +
+                        "where p.customer_id = :customerId", Payment.class)
+                        .setParameter("customerId", customerId)
+                        .getResultList()
+        );
     }
 
+    // todo refactor
+    // todo rewrite, cos need override lazy
     @Override
     public List<Payment> findAllAmountMoreThan(Long customerId, BigDecimal amount) {
-        return null;
+        return performReturningWithinPersistenceContext(entityManager ->
+                entityManager.createQuery("select p from Payment p " +
+                        "where p.customer_id = :customerId and p.amount > :amount", Payment.class)
+                        .setParameter("customerId", customerId)
+                        .setParameter("amount", amount)
+                        .getResultList()
+        );
     }
+
 
     private void performWithinPersistenceContext(Consumer<EntityManager> entityManagerConsumer) {
         performReturningWithinPersistenceContext(entityManager -> {

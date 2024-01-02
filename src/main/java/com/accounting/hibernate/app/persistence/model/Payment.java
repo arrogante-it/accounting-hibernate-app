@@ -40,4 +40,14 @@ public class Payment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "card_id")
     private Card card;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "contract_id")
+    private Contract contract;
+
+    public Payment(int amount_of_money, LocalDate time, Contract contract) {
+        this.amount_of_money = amount_of_money;
+        this.time = time;
+        this.contract = contract;
+    }
 }

@@ -1,5 +1,6 @@
 package com.accounting.hibernate.app.persistence.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -8,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -17,6 +19,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -49,4 +53,24 @@ public class Contract {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
     private Customer customer;
+
+    @OneToMany(mappedBy = "contract", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Payment> payments = new ArrayList<>();
+
+    public Contract(String name, String subject, int sum, String comments, LocalDate date) {
+        this.name = name;
+        this.subject = subject;
+        this.sum = sum;
+        this.comments = comments;
+        this.date = date;
+    }
+
+    public Contract(String name, String subject, int sum, String comments, LocalDate date, Customer customer) {
+        this.name = name;
+        this.subject = subject;
+        this.sum = sum;
+        this.comments = comments;
+        this.date = date;
+        this.customer = customer;
+    }
 }
