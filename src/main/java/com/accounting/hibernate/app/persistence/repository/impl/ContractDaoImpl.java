@@ -35,17 +35,21 @@ public class ContractDaoImpl implements ContractDao {
         });
     }
 
-    // todo rewrite, cos need override lazy
     @Override
     public Contract getById(Long id) {
-        return performReturningWithinPersistenceContext(entityManager -> entityManager.find(Contract.class, id));
+        return performReturningWithinPersistenceContext(entityManager ->
+                entityManager.createQuery("select c from Contract c join fetch c.customer " +
+                        "where c.id = :id", Contract.class)
+                        .setParameter("id", id)
+                        .getSingleResult()
+        );
     }
 
-    // todo rewrite, cos need override lazy
+
     @Override
     public List<Contract> getAll() {
         return performReturningWithinPersistenceContext(entityManager ->
-                entityManager.createQuery("select c from Contract c", Contract.class).getResultList());
+                entityManager.createQuery("select c from Contract c join fetch c.customer ", Contract.class).getResultList());
     }
 
     private void performWithinPersistenceContext(Consumer<EntityManager> entityManagerConsumer) {

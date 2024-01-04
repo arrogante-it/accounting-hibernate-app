@@ -38,18 +38,22 @@ public class PaymentDaoImpl implements PaymentDao {
         });
     }
 
-    // todo rewrite
     @Override
     public Payment getById(Long id) {
         return performReturningWithinPersistenceContext(entityManager ->
-                entityManager.find(Payment.class, id));
+                entityManager.createQuery("select p from Payment p join fetch p.contract " +
+                        "where p.id = :id", Payment.class)
+                .setParameter("id", id)
+                .getSingleResult()
+        );
+
     }
 
-    // todo rewrite, cos need override lazy
     @Override
     public List<Payment> getAll() {
         return performReturningWithinPersistenceContext(entityManager ->
-                entityManager.createQuery("select p from Payment p", Payment.class)).getResultList();
+                entityManager.createQuery("select p from Payment p join fetch p.contract", Payment.class))
+                .getResultList();
     }
 
     @Override
@@ -60,6 +64,7 @@ public class PaymentDaoImpl implements PaymentDao {
                         .setParameter("contractId", contractId)
                         .getResultList()
         );
+
     }
 
     // todo refactor
