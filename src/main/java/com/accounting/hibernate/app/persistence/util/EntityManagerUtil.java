@@ -1,5 +1,7 @@
 package com.accounting.hibernate.app.persistence.util;
 
+import static com.accounting.hibernate.app.persistence.constants.ExceptionConstants.ROLLED_BACK;
+import com.accounting.hibernate.app.persistence.exception.HQLOperationException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
@@ -31,7 +33,7 @@ public class EntityManagerUtil {
             entityTransaction.commit();
         } catch (Exception e) {
             entityTransaction.rollback();
-            throw new RuntimeException("rolled back." + e);
+            throw new HQLOperationException(ROLLED_BACK + e);
         } finally {
             entityManager.close();
         }

@@ -1,5 +1,7 @@
 package com.accounting.hibernate.app.persistence.repository.impl;
 
+import static com.accounting.hibernate.app.persistence.constants.AccountConstants.SELECT_ALL_CUSTOMERS_BY_ID_HQL;
+import static com.accounting.hibernate.app.persistence.constants.AccountConstants.SELECT_ALL_CUSTOMERS_HQL;
 import com.accounting.hibernate.app.persistence.model.Customer;
 import com.accounting.hibernate.app.persistence.repository.CustomerDao;
 import com.accounting.hibernate.app.persistence.util.EntityManagerUtil;
@@ -37,9 +39,7 @@ public class CustomerDaoImpl implements CustomerDao {
     public Customer getById(Long id) {
         return new EntityManagerUtil(entityManagerFactory)
                 .performReturningWithinPersistenceContext(entityManager ->
-                        entityManager.createQuery(
-                                "select distinct c from Customer c left join fetch c.contracts where c.id = :customerId",
-                                Customer.class)
+                        entityManager.createQuery(SELECT_ALL_CUSTOMERS_BY_ID_HQL, Customer.class)
                                 .setParameter("customerId", id)
                                 .getSingleResult());
     }
@@ -48,8 +48,7 @@ public class CustomerDaoImpl implements CustomerDao {
     public List<Customer> getAll() {
         return new EntityManagerUtil(entityManagerFactory)
                 .performReturningWithinPersistenceContext(entityManager ->
-                        entityManager.createQuery("select distinct c from Customer c left join fetch c.contract",
-                                Customer.class)
+                        entityManager.createQuery(SELECT_ALL_CUSTOMERS_HQL, Customer.class)
                                 .getResultList());
     }
 }

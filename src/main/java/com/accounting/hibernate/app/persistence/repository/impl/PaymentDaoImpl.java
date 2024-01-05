@@ -1,5 +1,10 @@
 package com.accounting.hibernate.app.persistence.repository.impl;
 
+import static com.accounting.hibernate.app.persistence.constants.AccountConstants.SELECT_ALL_PAYMENTS_BY_CONTRACT_ID_HQL;
+import static com.accounting.hibernate.app.persistence.constants.AccountConstants.SELECT_ALL_PAYMENTS_BY_CUSTOMER_ID_HQL;
+import static com.accounting.hibernate.app.persistence.constants.AccountConstants.SELECT_ALL_PAYMENTS_BY_ID_HQL;
+import static com.accounting.hibernate.app.persistence.constants.AccountConstants.SELECT_ALL_PAYMENTS_HQL;
+import static com.accounting.hibernate.app.persistence.constants.AccountConstants.SELECT_ALL_PAYMENTS_MORE_THAN_BY_CUSTOMER_ID_HQL;
 import com.accounting.hibernate.app.persistence.model.Payment;
 import com.accounting.hibernate.app.persistence.repository.PaymentDao;
 import com.accounting.hibernate.app.persistence.util.EntityManagerUtil;
@@ -38,8 +43,7 @@ public class PaymentDaoImpl implements PaymentDao {
     public Payment getById(Long id) {
         return new EntityManagerUtil(entityManagerFactory)
                 .performReturningWithinPersistenceContext(entityManager ->
-                        entityManager.createQuery("select p from Payment p join fetch p.contract " +
-                                "where p.id = :id", Payment.class)
+                        entityManager.createQuery(SELECT_ALL_PAYMENTS_BY_ID_HQL, Payment.class)
                                 .setParameter("id", id)
                                 .getSingleResult()
                 );
@@ -50,7 +54,7 @@ public class PaymentDaoImpl implements PaymentDao {
     public List<Payment> getAll() {
         return new EntityManagerUtil(entityManagerFactory)
                 .performReturningWithinPersistenceContext(entityManager ->
-                        entityManager.createQuery("select p from Payment p join fetch p.contract", Payment.class))
+                        entityManager.createQuery(SELECT_ALL_PAYMENTS_HQL, Payment.class))
                 .getResultList();
     }
 
@@ -58,8 +62,7 @@ public class PaymentDaoImpl implements PaymentDao {
     public List<Payment> findAllByContract(Long contractId) {
         return new EntityManagerUtil(entityManagerFactory)
                 .performReturningWithinPersistenceContext(entityManager ->
-                        entityManager.createQuery("select p from Payment p join fetch p.contract " +
-                                "where p.contract.id = :contractId", Payment.class)
+                        entityManager.createQuery(SELECT_ALL_PAYMENTS_BY_CONTRACT_ID_HQL, Payment.class)
                                 .setParameter("contractId", contractId)
                                 .getResultList()
                 );
@@ -67,26 +70,24 @@ public class PaymentDaoImpl implements PaymentDao {
     }
 
     // todo refactor
-    // todo rewrite, cos need override lazy
+    // todo check overriding lazy
     @Override
     public List<Payment> findAllByCustomer(Long customerId) {
         return new EntityManagerUtil(entityManagerFactory)
                 .performReturningWithinPersistenceContext(entityManager ->
-                        entityManager.createQuery("select p from Payment p " +
-                                "where p.customer_id = :customerId", Payment.class)
+                        entityManager.createQuery(SELECT_ALL_PAYMENTS_BY_CUSTOMER_ID_HQL, Payment.class)
                                 .setParameter("customerId", customerId)
                                 .getResultList()
                 );
     }
 
     // todo refactor
-    // todo rewrite, cos need override lazy
+    // todo check overriding lazy
     @Override
     public List<Payment> findAllAmountMoreThan(Long customerId, BigDecimal amount) {
         return new EntityManagerUtil(entityManagerFactory)
                 .performReturningWithinPersistenceContext(entityManager ->
-                        entityManager.createQuery("select p from Payment p " +
-                                "where p.customer_id = :customerId and p.amount > :amount", Payment.class)
+                        entityManager.createQuery(SELECT_ALL_PAYMENTS_MORE_THAN_BY_CUSTOMER_ID_HQL, Payment.class)
                                 .setParameter("customerId", customerId)
                                 .setParameter("amount", amount)
                                 .getResultList()

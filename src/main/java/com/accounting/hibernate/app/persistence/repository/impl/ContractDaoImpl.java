@@ -1,5 +1,7 @@
 package com.accounting.hibernate.app.persistence.repository.impl;
 
+import static com.accounting.hibernate.app.persistence.constants.AccountConstants.SELECT_ALL_CONTRACTS_BY_ID_HQL;
+import static com.accounting.hibernate.app.persistence.constants.AccountConstants.SELECT_ALL_CONTRACTS_HQL;
 import com.accounting.hibernate.app.persistence.model.Contract;
 import com.accounting.hibernate.app.persistence.repository.ContractDao;
 import com.accounting.hibernate.app.persistence.util.EntityManagerUtil;
@@ -39,8 +41,7 @@ public class ContractDaoImpl implements ContractDao {
     public Contract getById(Long id) {
         return new EntityManagerUtil(entityManagerFactory)
                 .performReturningWithinPersistenceContext(entityManager ->
-                        entityManager.createQuery("select c from Contract c join fetch c.customer " +
-                                "where c.id = :id", Contract.class)
+                        entityManager.createQuery(SELECT_ALL_CONTRACTS_BY_ID_HQL, Contract.class)
                                 .setParameter("id", id)
                                 .getSingleResult()
                 );
@@ -51,7 +52,7 @@ public class ContractDaoImpl implements ContractDao {
     public List<Contract> getAll() {
         return new EntityManagerUtil(entityManagerFactory)
                 .performReturningWithinPersistenceContext(entityManager ->
-                        entityManager.createQuery("select c from Contract c join fetch c.customer ", Contract.class)
+                        entityManager.createQuery(SELECT_ALL_CONTRACTS_HQL, Contract.class)
                                 .getResultList());
     }
 }
