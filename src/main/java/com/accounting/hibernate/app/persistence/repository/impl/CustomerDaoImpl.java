@@ -47,7 +47,7 @@ public class CustomerDaoImpl implements CustomerDao {
     @Override
     public List<Customer> getAll() {
         return performReturningWithinPersistenceContext(entityManager ->
-                entityManager.createQuery("select distinct c from Customer c left join fetch c.contracts",
+                entityManager.createQuery("select distinct c from Customer c left join fetch c.contract",
                         Customer.class)
                         .getResultList());
     }
