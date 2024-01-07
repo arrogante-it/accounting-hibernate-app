@@ -6,6 +6,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import lombok.AllArgsConstructor;
+import lombok.Cleanup;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -22,6 +23,7 @@ public class EntityManagerUtil {
     }
 
     public <T> T performReturningWithinPersistenceContext(Function<EntityManager, T> entityManagerFunction) {
+        @Cleanup
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         EntityTransaction entityTransaction = entityManager.getTransaction();
         entityTransaction.begin();
@@ -34,8 +36,6 @@ public class EntityManagerUtil {
         } catch (Exception e) {
             entityTransaction.rollback();
             throw new HQLOperationException(ROLLED_BACK + e);
-        } finally {
-            entityManager.close();
         }
 
         return result;
