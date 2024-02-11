@@ -23,14 +23,14 @@ public class Application {
         ContractDao contractDao = new ContractDaoImpl(emf);
         PaymentDao paymentDao = new PaymentDaoImpl(emf);
 
-        Customer customer2 = new Customer(3L, "Harry", "Wall Street");
-        customerDao.save(customer2);
+        Customer customer1 = new Customer(3L, "Harry", "Wall Street");
+        customerDao.save(customer1);
 
         Contract contract1 = new Contract("MMM1", "Subject", 100, "comments",
                 LocalDate.parse("2023-12-27"));
         contractDao.save(contract1);
         Contract contract2 = new Contract("General Dynamics", "Subject2", 150, "comments2",
-                LocalDate.parse("2024-01-02"), customer2);
+                LocalDate.parse("2024-01-02"), customer1);
         contractDao.save(contract2);
 
         Payment payment1 = new Payment(101, LocalDate.parse("2023-12-26"), contract1);
