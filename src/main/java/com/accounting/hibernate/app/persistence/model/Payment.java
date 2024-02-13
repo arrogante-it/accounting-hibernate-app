@@ -32,7 +32,7 @@ public class Payment {
     private Long id;
 
     @Column(name = "amount", nullable = false)
-    private int amount_of_money;
+    private int moneyAmount;
 
     @Column(name = "time", nullable = false)
     private LocalDate time;
@@ -45,8 +45,8 @@ public class Payment {
     @JoinColumn(name = "contract_id")
     private Contract contract;
 
-    public Payment(int amount_of_money, LocalDate time, Contract contract) {
-        this.amount_of_money = amount_of_money;
+    public Payment(int moneyAmount, LocalDate time, Contract contract) {
+        this.moneyAmount = moneyAmount;
         this.time = time;
         this.contract = contract;
     }

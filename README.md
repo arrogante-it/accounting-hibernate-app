@@ -8,9 +8,17 @@
 
 - Build project: `mvn clean install`
 
+- CREATE DATABASE accounting_db;
+- CREATE USER accounting IDENTIFIED BY 'accounting';
+- GRANT ALL PRIVILEGES ON accounting_db.* TO 'accounting';
+- FLUSH PRIVILEGES;
+
+- execute SQL script: src/main/resources/create_table.sql
+
 ## Prerequisite:
 - JDK 11 or higher
 - Maven 4.0.0 or higher
+- MySQL 8.0 or higher 
 
 ## Program main functional:
 
