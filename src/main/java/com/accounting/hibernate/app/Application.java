@@ -14,37 +14,37 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 
 public class Application {
     public static void main(String[] args) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("AccountingHibernateApp");
+
         CustomerDao customerDao = new CustomerDaoImpl(emf);
         ContractDao contractDao = new ContractDaoImpl(emf);
         PaymentDao paymentDao = new PaymentDaoImpl(emf);
 
-        Customer customer1 = new Customer(3L, "Harry", "Wall Street");
-        customerDao.save(customer1);
-
-        Contract contract1 = new Contract("MMM1", "Subject", 100, "comments",
-                LocalDate.parse("2023-12-27"));
-        contractDao.save(contract1);
-        Contract contract2 = new Contract("General Dynamics", "Subject2", 150, "comments2",
-                LocalDate.parse("2024-01-02"), customer1);
-        contractDao.save(contract2);
-
-        Payment payment1 = new Payment(101, LocalDate.parse("2023-12-26"), contract1);
-        paymentDao.save(payment1);
-        Payment payment2 = new Payment(500, LocalDate.parse("2024-01-02"), contract2);
-        paymentDao.save(payment2);
-
         EntityManager entityManager = emf.createEntityManager();
         entityManager.getTransaction().begin();
 
-        List<Payment> list = paymentDao.findAllByContract(1L);
-        list.forEach(System.out::println);
+        Customer customer1 = new Customer(3L, "Harry", "Wall Street");
+        Contract contract1 = new Contract("MMM1", "Subject", 100, "comments", LocalDate.parse("2023-12-27"));
+        Contract contract2 = new Contract("General Dynamics", "Subject2", 150, "comments2", LocalDate.parse("2024-01-02"), customer1);
+        Payment payment1 = new Payment(101, LocalDate.parse("2023-12-26"), contract1);
+        Payment payment2 = new Payment(500, LocalDate.parse("2024-01-02"), contract2);
+
+        customerDao.save(customer1);
+        contractDao.save(contract1);
+        contractDao.save(contract2);
+        paymentDao.save(payment1);
+        paymentDao.save(payment2);
+
+        List<Payment> list = paymentDao.getAll();
 
         entityManager.getTransaction().commit();
+        entityManager.flush();
+
         entityManager.close();
         emf.close();
     }

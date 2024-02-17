@@ -48,6 +48,7 @@ public class Customer {
         this.address = address;
     }
 
+    @ToString.Exclude
     @Setter(AccessLevel.PRIVATE)
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     List<Contract> contracts = new ArrayList<>();

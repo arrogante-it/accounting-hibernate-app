@@ -37,10 +37,7 @@ public class Payment {
     @Column(name = "time", nullable = false)
     private LocalDate time;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "card_id")
-    private Card card;
-
+    @ToString.Exclude
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "contract_id")
     private Contract contract;

@@ -25,16 +25,15 @@ public class EntityManagerUtil {
     public <T> T performReturningWithinPersistenceContext(Function<EntityManager, T> entityManagerFunction) {
         @Cleanup
         EntityManager entityManager = entityManagerFactory.createEntityManager();
-        EntityTransaction entityTransaction = entityManager.getTransaction();
-        entityTransaction.begin();
+        entityManager.getTransaction().begin();
 
         T result;
 
         try {
             result = entityManagerFunction.apply(entityManager);
-            entityTransaction.commit();
+            entityManager.getTransaction().commit();
         } catch (Exception e) {
-            entityTransaction.rollback();
+            entityManager.getTransaction().rollback();
             throw new HQLOperationException(ROLLED_BACK + e);
         }
 

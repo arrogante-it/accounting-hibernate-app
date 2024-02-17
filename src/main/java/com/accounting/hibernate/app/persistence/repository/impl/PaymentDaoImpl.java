@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 public class PaymentDaoImpl implements PaymentDao {
