@@ -25,9 +25,6 @@ public class Application {
         ContractDao contractDao = new ContractDaoImpl(emf);
         PaymentDao paymentDao = new PaymentDaoImpl(emf);
 
-        EntityManager entityManager = emf.createEntityManager();
-        entityManager.getTransaction().begin();
-
         Customer customer1 = new Customer(3L, "Harry", "Wall Street");
         Contract contract1 = new Contract("MMM1", "Subject", 100, "comments", LocalDate.parse("2023-12-27"));
         Contract contract2 = new Contract("General Dynamics", "Subject2", 150, "comments2", LocalDate.parse("2024-01-02"), customer1);
@@ -40,7 +37,12 @@ public class Application {
         paymentDao.save(payment1);
         paymentDao.save(payment2);
 
+        EntityManager entityManager = emf.createEntityManager();
+        entityManager.getTransaction().begin();
+
         List<Payment> list = paymentDao.getAll();
+
+        list.forEach(System.out::println);
 
         entityManager.getTransaction().commit();
         entityManager.flush();
