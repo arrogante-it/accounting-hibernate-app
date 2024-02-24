@@ -5,6 +5,7 @@ import static com.accounting.hibernate.app.persistence.constants.AccountConstant
 import com.accounting.hibernate.app.persistence.model.Customer;
 import com.accounting.hibernate.app.persistence.repository.CustomerDao;
 import com.accounting.hibernate.app.persistence.util.EntityManagerUtil;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.AllArgsConstructor;
 
@@ -15,39 +16,39 @@ public class CustomerDaoImpl implements CustomerDao {
     private EntityManagerFactory entityManagerFactory;
 
     @Override
-    public void save(Customer customer) {
+    public void save(Customer customer, EntityManager entityManager) {
         new EntityManagerUtil(entityManagerFactory)
-                .performWithinPersistenceContext(entityManager -> entityManager.persist(customer));
+                .performWithinPersistenceContext(em -> entityManager.persist(customer));
     }
 
     @Override
-    public void update(Customer customer) {
+    public void update(Customer customer, EntityManager entityManager) {
         new EntityManagerUtil(entityManagerFactory)
-                .performWithinPersistenceContext(entityManager -> entityManager.merge(customer));
+                .performWithinPersistenceContext(em -> entityManager.merge(customer));
     }
 
     @Override
-    public void delete(Customer customer) {
+    public void delete(Customer customer, EntityManager entityManager) {
         new EntityManagerUtil(entityManagerFactory)
-                .performWithinPersistenceContext(entityManager -> {
+                .performWithinPersistenceContext(em -> {
                     Customer mergedCustomer = entityManager.merge(customer);
                     entityManager.remove(mergedCustomer);
                 });
     }
 
     @Override
-    public Customer getById(Long id) {
+    public Customer getById(Long id, EntityManager entityManager) {
         return new EntityManagerUtil(entityManagerFactory)
-                .performReturningWithinPersistenceContext(entityManager ->
+                .performReturningWithinPersistenceContext(em ->
                         entityManager.createQuery(SELECT_ALL_CUSTOMERS_BY_ID_HQL, Customer.class)
                                 .setParameter("customerId", id)
                                 .getSingleResult());
     }
 
     @Override
-    public List<Customer> getAll() {
+    public List<Customer> getAll(EntityManager entityManager) {
         return new EntityManagerUtil(entityManagerFactory)
-                .performReturningWithinPersistenceContext(entityManager ->
+                .performReturningWithinPersistenceContext(em ->
                         entityManager.createQuery(SELECT_ALL_CUSTOMERS_HQL, Customer.class)
                                 .getResultList());
     }
